@@ -18,12 +18,9 @@ const allowedOrigins = (process.env.CLIENT_URL || "")
 const corsOptions = {
   origin(origin, cb) {
     if (!origin) return cb(null, true);
-
-    // Allow localhost (with or without port)
     if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
       return cb(null, true);
     }
-
     if (allowedOrigins.includes(origin)) return cb(null, true);
     return cb(new Error(`Origin ${origin} not allowed by CORS`));
   },
@@ -32,11 +29,15 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-// ✅ Use cors middleware correctly – single call
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 
 app.use(express.json({ limit: "1mb" }));
+
+// ✅ ADD THIS LINE – fixes the "Route not found" error at the root URL
+app.get("/", (req, res) => {
+  res.json({ message: "Smart Habit Tracker API is running" });
+});
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", time: new Date().toISOString() });
