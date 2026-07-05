@@ -7,8 +7,14 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    const raw = localStorage.getItem("user");
-    return raw ? JSON.parse(raw) : null;
+    try {
+      const raw = localStorage.getItem("user");
+      // If raw is null, undefined, or the strings "undefined" or "null", return null
+      if (!raw || raw === "undefined" || raw === "null") return null;
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
   });
   const [loading, setLoading] = useState(true);
 

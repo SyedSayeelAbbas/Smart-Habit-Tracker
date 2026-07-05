@@ -2,26 +2,27 @@ import mongoose from "mongoose";
 
 const habitLogSchema = new mongoose.Schema(
   {
-    userId:{
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
-      index: true
+      index: true,
     },
-    habitId:{
+    habitId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Habit",
       required: true,
-      index: true
+      index: true,
     },
-    comleteDate:{ type: String, required: true},
-    notes: {type: String, default:""}
+    completedDate: { type: String, required: true },
+    notes: { type: String, default: "" },
   },
-  {timestamps:true}
+  { timestamps: true }
 );
 
 habitLogSchema.index(
-  {userId:1, habitId:1, completedDate: 1},
-  {unique:true}
-)
+  { userId: 1, habitId: 1, completedDate: 1 },
+  { unique: true }
+);
+
 export default mongoose.model("HabitLog", habitLogSchema);

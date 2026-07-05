@@ -1,17 +1,18 @@
-import Habit from "../models/Habit.js"
-import HabitLog from "../models/HabitLog.js"
+import Habit from "../models/Habit.js";
+import HabitLog from "../models/HabitLog.js";
 
-export const getHabits = async (req,res)=>{
-  try{
-    const {includeArchived} = req.query;
-    const filter = {userId: req.user._id};
-    if(includeArchived !== "true") filter.isArchived = false;
-    const habits = (await Habit.find(filter)).toSorted({order: 1, createdAt: 1});
+export const getHabits = async (req, res) => {
+  try {
+    const { includeArchived } = req.query;
+    const filter = { userId: req.user._id };
+    if (includeArchived !== "true") filter.isArchived = false;
+    // ✅ Fixed: .sort() instead of .toSorted()
+    const habits = await Habit.find(filter).sort({ order: 1, createdAt: 1 });
     res.json(habits);
-} catch(err){
-  res.status(500).json({message: err.message})
-}
-}
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 export const createHabit = async (req, res) => {
   try {
@@ -49,7 +50,6 @@ export const createHabit = async (req, res) => {
   }
 };
 
-
 export const updateHabit = async (req, res) => {
   try {
     const habit = await Habit.findOne({
@@ -80,7 +80,6 @@ export const updateHabit = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
 
 export const deleteHabit = async (req, res) => {
   try {
@@ -116,7 +115,6 @@ export const archiveHabit = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
 
 export const reorderHabits = async (req, res) => {
   try {

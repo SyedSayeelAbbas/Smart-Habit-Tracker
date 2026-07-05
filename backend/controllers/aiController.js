@@ -108,7 +108,7 @@ export const suggestHabits = async (req, res) => {
           name: "2 minutes of mindful breathing",
           description: "Pause and breathe to reset focus and reduce stress.",
           frequency: "daily",
-          category: "Mindfulness",
+          category: "Mindfulness",   // Now valid after adding to model
           icon: "🧘",
           reason: "Tiny anchor habit that fits any schedule.",
         },

@@ -1,14 +1,21 @@
 import axios from "axios";
 
+// Build the base URL: if the env var is set, use it; otherwise fallback to localhost:8000/api
+let baseURL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+
+// Ensure it ends with "/api" (so that requests go to /api/...)
+if (!baseURL.endsWith("/api")) {
+  baseURL = `${baseURL}/api`;
+}
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api", // Adjusted standard port from 8080 to 5000 if needed
+  baseURL,
 });
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
-    // FIXED: Changed standard single quotes to backticks for proper interpolation
-    config.headers.Authorization = `Bearer ${token}`; 
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
@@ -18,8 +25,6 @@ api.interceptors.response.use(
   (err) => {
     if (err.response?.status === 401) {
       const path = window.location.pathname;
-      
-      // FIXED: Restructured logical block checking so users on "/" are also handled
       if (path !== "/login" && path !== "/register") {
         localStorage.removeItem("token");
         localStorage.removeItem("user");

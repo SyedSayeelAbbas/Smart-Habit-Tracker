@@ -55,6 +55,11 @@ export default function Register() {
           <span className="font-semibold text-lg">AI Habit Tracker</span>
         </Link>
 
+        {/* 👇 NEW: Back to Home link */}
+        <Link to="/" className="inline-flex items-center gap-1 text-sm text-soft hover:text-[var(--text)] transition mb-4">
+          ← Back to Home
+        </Link>
+
         <div className="card p-7">
           <h1 className="text-2xl font-semibold">Create your account</h1>
           <p className="text-sm text-muted mt-1">
